@@ -1,0 +1,209 @@
+---
+title: "McMillan BV Metabolite Analysis"
+author: "Kaitlin Marquis"
+date: "8/31/2018"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: show
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#Load required libraries
+library(tibble)
+library(tidyr)
+library(dplyr)
+library(reshape)
+library(janitor)
+library(data.table)
+library(broom)
+library(readxl)
+library(writexl)
+library(ggplot2)
+library(kableExtra)
+```
+
+**A multi-platform metabolomics approach identifies highly specific biomarkers of bacterial diversity in the vagina of pregnant and non-pregnant women by McMillan et. al.**
+
+Data is reported for women with Nugent Scores ranging from 0 - 10, where 0-3 is generally considered BV negative, 4-6 is considered BV indeterminate, and 7-10 is considered BV positive. This metabolomics study includes:
+
+* 78 BV negative women, 38 non-pregnant
+* 22 BV indeterminate women, 6 non-pregnant 
+* 23 BV positive women, 19 non-pregnant
+
+*For all subsequent analysis, I will strictly be using the non-pregnant cohort to match the subject demographics of the other two metabolomics studies. I need to go back to the paper to understand why all of the relative concentrations reported are negative values for each of the metabolites.*
+
+#Study Data
+```{r McMillan data, warning = F, message = F}
+
+#Load data file containing relative concentrations of metabolites & subject info
+data <- read.csv('McMillan metabolite conc.csv', stringsAsFactors = FALSE, header = TRUE, skip = 1) %>%
+  rename_all(., function (x) {seq(1, length(x))}) %>%
+  row_to_names(., row_number = 1) %>%
+  select(-`pval raw ttest Nugent BV vs N`, -`pval BH corrected Nugent BV vs N`, -`Odds Ratio`, -`2.50%`, -`97.50%`, -`Average relative abundance`) 
+
+#Load subject metadata containing actual Nugent scores
+metadata <- read.csv('McMillan subject metadata.csv', stringsAsFactors = FALSE, header = TRUE) %>%
+  row_to_names(., row_number = 1) %>%
+  rename_(., sample_ID = "Patient_ID")
+
+#Create master dataframe with metadata
+study_data <- as.data.frame(t(data), stringsAsFactors = FALSE) %>%
+  row_to_names(., row_number = 1) %>%
+  rownames_to_column(., var = 'sample_ID') %>%
+  select(-diversity, -Pregnant) %>%
+  left_join(., metadata, by = "sample_ID") %>%
+  filter(., Pregnant == 'n' & is.na(.$Nugent) == FALSE) %>%
+  mutate_at(., "Nugent Status" , function (x) {ifelse(x == 'BV', 'HDC', ifelse(x == 'N', 'LDC', x))}) %>%
+  select(-`L Primer`, -`R primer`) %>%
+  mutate_at(., .vars = vars(tyrosine:Nugent), function (x) {as.numeric(x)}) %>%
+  rename_(., Nugent_status = quote(`Nugent Status`)) %>%
+  mutate_at(., "Nugent_status", function (x) {as.factor(x)})
+
+#For HTML output
+kable(study_data, caption = 'Study Data for Non-Pregnant Cohort') %>%
+  kable_styling(bootstrap_options = c('condensed', 'striped')) %>%
+  scroll_box(width = "100%", height = "600px")
+
+```
+
+#Metabolite Fold Enrichment
+
+Calculate the relative fold enrichment of each metabolite in Intermediate and HDC communities compared to LDC communities. 
+
+```{r fold enrichment, message = F, warning = F}
+
+#Calculate mean relative concentration and standard error for each metabolite among communities with different Nugent status
+stats <- study_data %>%
+  select(`Nugent_status`:`n-phenyl-ethylenediamine`) %>%
+  melt(., id.vars = 'Nugent_status') %>%
+  rename_(., Metabolite = 'variable', Rel_conc = 'value') %>%
+  group_by(`Nugent_status`, Metabolite) %>%
+  summarise(Mean_conc = mean(Rel_conc), SE_conc = (sd(Rel_conc)/sqrt(length(Rel_conc))))
+
+#For HTML output
+kable(stats, caption = 'Mean Concentration of Metabolite in HDC, Intermediate, & LDC Communities') %>%
+  kable_styling(bootstrap_options = c('condensed', 'striped')) %>%
+  scroll_box(width = "100%", height = "600px")
+
+#Calculate fold enrichment of each metabolite compared to LDC communities
+FE <- stats %>%
+  reshape2::dcast(., Metabolite ~ Nugent_status, value.var = "Mean_conc") %>%
+  mutate_at(., .vars = vars(HDC:LDC), function(x) {.$LDC/x}) 
+
+#For HTML output
+kable(FE, caption = 'HDC & Intermediate Metabolite Fold Enrichment') %>%
+  kable_styling(bootstrap_options = c('condensed', 'striped')) %>%
+  scroll_box(width = "100%", height = "600px")
+```
+
+#Metabolite Significance Test
+
+Calculate metabolites with significantly different fold enrichment in intermediate and HDC communities using non-parametric Kruskal-Wallis test with FDR correction. Additionally, calculate metabolites that differ significantly between HDC & LDC communities only (excludes intermediate Nugent status) using non-parametric Wilcoxon Rank Sum test with FDR correction. 
+
+```{r sig tests, message = F, warning = F}
+#Perform non-parametric Kruskal-Wallis Test to determine metabolites signficantly different between Nugent Status groups
+KW_test <- study_data %>%
+  select(`Nugent_status`:`n-phenyl-ethylenediamine`) %>%
+  reshape2::melt(., id.vars = 'Nugent_status') %>%
+  rename_(., Metabolite = 'variable', Rel_conc = 'value') %>%
+  group_by(Metabolite) %>% 
+  do(tidy(kruskal.test(x= .$Rel_conc, g = .$Nugent_status)$p.value)) %>%
+  rename_(KW_pvalue = 'x') %>%
+  ungroup(.) %>%
+  mutate(FDR_KW_pvalue = p.adjust(KW_pvalue, method = 'fdr')) 
+
+#For HTML output
+kable(KW_test, caption = 'Non-parametric Kruskal-Wallis Test for Metabolite Fold Enrichment') %>%
+  kable_styling(bootstrap_options = c('condensed', 'striped')) %>%
+  scroll_box(width = "100%", height = "600px")
+
+#Perform non-parametric Wilcoxon Test to determine metabolites significantly difference between HDC and LDC communities (exlcludes data from intermediate Nugent status)
+Wilcoxon_test <- study_data %>%
+  select(`Nugent_status`:`n-phenyl-ethylenediamine`) %>%
+  filter(Nugent_status != 'Int') %>%
+  reshape2::melt(., id.vars = 'Nugent_status') %>%
+  rename_(., Metabolite = 'variable', Rel_conc = 'value') %>%
+  group_by(Metabolite) %>% 
+  do(tidy(wilcox.test(.$Rel_conc ~ .$Nugent_status, alternative = 'two.sided')$p.value)) %>%
+  rename_(Wilcoxon_pvalue = 'x') %>%
+  ungroup(.) %>%
+  mutate(FDR_Wilcoxon_pvalue = p.adjust(Wilcoxon_pvalue, method = 'fdr'))
+
+#For HTML output
+kable(Wilcoxon_test, caption = 'Non-parametric Wilcoxon Rank Sum Test for Metabolite Fold Enrichment between HDC & LDC Communities') %>%
+  kable_styling(bootstrap_options = c('condensed', 'striped')) %>%
+  scroll_box(width = "100%", height = "600px")
+```
+
+#Data Summary & Export
+
+```{r data summary, message = F, warning = F}
+#Create final master data frame with fold enrichment and statitstics
+final_data <- left_join(FE, KW_test) %>%
+  select(-KW_pvalue) %>% 
+  left_join(., Wilcoxon_test) %>%
+  select(-Wilcoxon_pvalue) %>%
+  mutate(Study = rep_len('McMillan', length(.$Metabolite)), Detection = rep_len('GC-MS', length(.$Metabolite))) %>%
+  select(Study, Detection, Metabolite, HDC, Int, LDC, FDR_KW_pvalue, FDR_Wilcoxon_pvalue) 
+
+#For HTML output
+kable(final_data, caption = 'Summary of Data from McMillan et al.') %>%
+  kable_styling(bootstrap_options = c('condensed', 'striped')) %>%
+  scroll_box(width = "100%", height = "600px")
+
+#Export Data
+write_xlsx(final_data, 'McMillan_data_summary.xlsx')
+```
+
+#Determine which bugs are correlated with 2-HV level
+
+```{r 2HV corr}
+
+#load 16S data
+DNA <- read_xls('McMillan_16S.xls', skip = 1, col_names = T) %>%
+  mutate_at("Taxa", function (x) {sub("^.*;(.*)$", "\\1", x)}) %>%
+  mutate_if(., colnames(.) != 'Taxa', function (x) {(x/sum(x))*100}) %>%
+  pivot_longer(., !Taxa, names_to = 'sample_ID', values_to = '16S_RA') 
+
+#reformat metabolite data to match 16S data
+met_data <- data %>%
+  filter(sample_ID != "diversity" & sample_ID != "Nugent Status" & sample_ID != "Pregnant") %>%
+  dplyr::rename(., metabolite = "sample_ID") %>%
+  mutate_if(., colnames(.) != 'metabolite', as.numeric) %>%
+  pivot_longer(., !metabolite, names_to = 'sample_ID', values_to = "met_conc")
+
+#merge dataframes
+merge_data <- right_join(DNA, met_data) %>%
+  filter(metabolite == '2-hydroxyisovalerate') %>%
+  select(-metabolite) 
+
+cor_data <- merge_data %>%
+  group_by(Taxa) %>%
+  summarise(., tau = cor.test(`16S_RA`, met_conc, method = 'kendall')$estimate, 
+            pval = cor.test(`16S_RA`, met_conc, method = 'kendall')$p.value) %>%
+  mutate(Study = rep('McMillan', times = nrow(.))) %>%
+  filter(Taxa == "Lactobacillus" | pval <= .05 | Taxa == "Prevotella" | Taxa == "Veillonella")
+
+#factor
+cor_data$Taxa <- factor(cor_data$Taxa, levels = cor_data %>% arrange(pval) %>% pull(Taxa))
+
+cor_plot <- ggplot(cor_data %>% arrange(pval), aes(x = Taxa, y = tau, fill = Taxa)) +
+  geom_col() +
+  geom_text(aes(label = signif(pval,1)), size =3) +
+  theme_bw() +
+  ggtitle('McMillan - Bacterial Abundance Correlated with 2-HV Concentration') +
+  theme(legend.position = 'none', 
+        axis.text.x = element_text(angle = 90),
+        panel.grid.minor = element_blank(),
+        plot.title = element_text(face = "bold", hjust = .5)) +
+  xlab(NULL) +
+  ylab("Kendall Correlation Coefficient \n (Tau) \n") 
+
+cor_plot
+ggsave(filename = 'McMillan_RA.2HVcorrplot.pdf')
+
+```

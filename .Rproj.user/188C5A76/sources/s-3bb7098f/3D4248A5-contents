@@ -1,0 +1,51 @@
+"","Study","Detection","previous_name","HDC","Int","LDC","name_search","smiles","inchi","inchikey","source"
+"1","McMillan","GC-MS","1-phenyl-1,2-ethanediol","0.99868699751396683","0.99434115394647249",1,"styrene glycol",NA,NA,NA,NA
+"2","McMillan","GC-MS","1,2,4-butanetriol","0.98590038795991508","1.0124428697126291",1,"2-deoxyerythritol",NA,NA,NA,NA
+"3","McMillan","GC-MS","1,3,4-dihydroxybutanoate","0.94797704327595156","1.00999899447736",1,"""(s)-3,4-dihydroxybutanoate""",NA,NA,NA,NA
+"4","McMillan","GC-MS","2-methyl-2,3-dihydroxypropanoate","1.029514154774543","0.91984832067851696",1,"methyl glycerate",NA,NA,NA,NA
+"5","McMillan","GC-MS","2-o-glycerol-d-galactopyranoside","3.2485345073901959","3.160594203339306",3,"""2-(2,3-dihydroxypropoxy)-6-(hydroxymethyl)oxane-3,4,5-triol""",NA,NA,NA,NA
+"6","McMillan","GC-MS","beta-galactopyranoside","0.91715704737745474","1.084373559781947",1,"3-beta-d-galactosyl-sn-glycerol",NA,NA,NA,NA
+"7","McMillan","GC-MS","ethyl-glucopyranoside","0.94815095787031156","0.93412630039382205",1,"ethyl d-glucopyranoside",NA,NA,NA,NA
+"8","McMillan","GC-MS","glycero-gulo-heptose","0.93448961360841032","1.0116672203633681",1,"glucoheptose",NA,NA,NA,NA
+"9","McMillan","GC-MS","n-acetyl-lysine","0.74685860768913015","1.054873441806665",1,"n6-acetyllysine",NA,NA,NA,NA
+"10","McMillan","GC-MS","n-acetyl-putrescine","1.169240809543169","1.056746927012608",1,"acetylputrescine",NA,NA,NA,NA
+"11","Srinivasan","GC-MS, LC-MS","1-arachidonoylglycerophosphoethanolamine","0.56000000000000005",NA,1,"1-arachidonyl-sn-glycero-3-phosphoethanolamine",NA,NA,NA,NA
+"12","Srinivasan","GC-MS, LC-MS","1-linoleoylglycerophosphoethanolamine","0.56999999999999995",NA,1,"1-linoleoyl-sn-glycero-3-phosphoethanolamine",NA,NA,NA,NA
+"13","Srinivasan","GC-MS, LC-MS","1-palmitoylplasmenylethanolamine","0.36",NA,1,"1-(1z-hexadecenyl)-sn-glycero-3-phosphoethanolamine",NA,NA,NA,NA
+"14","Srinivasan","GC-MS, LC-MS","2-arachidonoylglycerophosphoethanolamine","0.47",NA,1,"1-hydroxy-2-arachidonoyl-sn-glycero-3-phosphoethanolamine",NA,NA,NA,NA
+"15","Srinivasan","GC-MS, LC-MS","2-glutamylglutamate","0.3",NA,1,"α-glutamylglutamate",NA,NA,NA,NA
+"16","Srinivasan","GC-MS, LC-MS","2-linoleoylglycerophosphoethanolamine","0.47",NA,1,"2-linoleoyl-1-palmitoyl-sn-glycero-3-phosphatidylethanolamine",NA,NA,NA,NA
+"17","Srinivasan","GC-MS, LC-MS","2-oleoylglycerophosphoethanolamine","0.59",NA,1,"1-palmitoyl-2-oleoyl-gpe",NA,NA,NA,NA
+"18","Srinivasan","GC-MS, LC-MS","2-palmitoleoylglycerophosphoethanolamine","0.53",NA,1,"1-oleoyl-2-palmitoyl-sn-glycero-3-phosphoethanolamine",NA,NA,NA,NA
+"19","Srinivasan","GC-MS, LC-MS","2-tocopherol","0.76",NA,1,"a-tocopherol",NA,NA,NA,NA
+"20","Srinivasan","GC-MS, LC-MS","5-methylthioadenosine","1.49",NA,1,"methylthioadenosine",NA,NA,NA,NA
+"21","Srinivasan","GC-MS, LC-MS","adenosine'-monophosphate","0.36",NA,1,"adenosine-monophosphate",NA,NA,NA,NA
+"22","Srinivasan","GC-MS, LC-MS","adenosine'diphosphoribose","0.4",NA,1,"adenosine-5-diphosphate",NA,NA,NA,NA
+"23","Srinivasan","GC-MS, LC-MS","aspartate-glutamate","0.3",NA,1,"aspartylglutamate",NA,NA,NA,NA
+"24","Srinivasan","GC-MS, LC-MS","dimethylarginine","1.33",NA,1,"5-[(diaminomethylidene)amino]-2-(dimethylamino)pentanoic acid",NA,NA,NA,NA
+"25","Srinivasan","GC-MS, LC-MS","flavin adenine dinucleotide","2.0499999999999998",NA,1,"adenine-riboflavin dinuceotide",NA,NA,NA,NA
+"26","Srinivasan","GC-MS, LC-MS","fructose,6-diphosphate","0.18",NA,1,"""fructose 1,6-diphosphate""",NA,NA,NA,NA
+"27","Srinivasan","GC-MS, LC-MS","glycylglycine","0.1",NA,1,"glycyl glycine",NA,NA,NA,NA
+"28","Srinivasan","GC-MS, LC-MS","indolelactate","0.38",NA,1,"indole-3-lactic acid",NA,NA,NA,NA
+"29","Srinivasan","GC-MS, LC-MS","oleic ethanolamide","4.72",NA,1,"oleic acid ethanolamide",NA,NA,NA,NA
+"30","Srinivasan","GC-MS, LC-MS","valinylglutamate","0.18",NA,1,"valylglutamic acid",NA,NA,NA,NA
+"31","Vitali","H-NMR","propylene-glycol","1.530973451327434",NA,1,"""1,2-propanediol""",NA,NA,NA,NA
+"32","Vitali","H-NMR","sn-glycero-3-phophocholine","0.55102040816326525",NA,1,"glycerol-3-phosphocholine",NA,NA,NA,NA
+"33","Yeoman","GC-MS","2-aminoethylphosphate","0.48418790297820091","0.8400368437212159",1,"2-aminoethyl phosphate",NA,NA,NA,NA
+"34","Yeoman","GC-MS","2-hydroxy-3-methyl-2-cyclopenten-1-one","0.34448119563885832","1.6941841234840129",1,"cyclotene",NA,NA,NA,NA
+"35","Yeoman","GC-MS","2-keto-gluconic acid","0.77910052910052907","1.0744047619047621",1,"2-oxogluconic acid",NA,NA,NA,NA
+"36","Yeoman","GC-MS","2-methyl-2-hydroxybutanoic acid","3.6840958605664489","0.27941176470588241",1,"2-hydroxy-2-methyl-butanoic acid",NA,NA,NA,NA
+"37","Yeoman","GC-MS","2-methyl-2,3-hydroxypropanoic acid","1.055555555555556","0.98392857142857149",1,"""2,3-dihydroxy-2-methylpropionic acid""",NA,NA,NA,NA
+"38","Yeoman","GC-MS","2-o-glycerol-beta-d-galactopyranoside","0.48554005547397622","0.43637573421439058",1,"""2-(2,3-dihydroxypropoxy)-6-(hydroxymethyl)oxane-3,4,5-triol""",NA,NA,NA,NA
+"39","Yeoman","GC-MS","2-tocopherolacetic acid","0.61083140888640264","0.493518438831275",1,"a-tocopherol",NA,NA,NA,NA
+"40","Yeoman","GC-MS","2,4-hydroxybenzoic acid","0.31865828092243181","0.53773584905660365",1,"""2,4-dihydroxy-benzoic acid""",NA,NA,NA,NA
+"41","Yeoman","GC-MS","3-indole lactic acid","0.30158730158730163","0.27361751152073732",1,"indole-3-lactic acid",NA,NA,NA,NA
+"42","Yeoman","GC-MS","3-methyl-2-hydroxybutanoic acid","Inf","Inf",NA,"2-hydroxy-3-methyl-butyric acid",NA,NA,NA,NA
+"43","Yeoman","GC-MS","3-methyl-2-hydroxypentanoic acid","5.2777777777777786","3.5625",1,"2-hydroxy-3-methyl-pentanoic acid",NA,NA,NA,NA
+"44","Yeoman","GC-MS","3-methyl-3-hydroxybutanoic acid","1.2357723577235771","1.351626016260163",1,"3-hydroxy-3-methylbutyric acid",NA,NA,NA,NA
+"45","Yeoman","GC-MS","a,4-hydroxybenzenepropanoic acid","2.0165837479270321","0.80643656716417911",1,"""2,4-dihydroxybenzenepropionic acid""",NA,NA,NA,NA
+"46","Yeoman","GC-MS","diethyleneglycol","2.983366600133067","5.6032934131736516",1,"diethylenglykol",NA,NA,NA,NA
+"47","Yeoman","GC-MS","methyl-hexadecanoic acid","4.4861111111111116","1.4985119047619051",1,"hexadecanoic acid methyl ester",NA,NA,NA,NA
+"48","Yeoman","GC-MS","monomethylphosphate","0.79549114331723014","0.65398550724637672",1,"methyl phosphate",NA,NA,NA,NA
+"49","Yeoman","GC-MS","n-acetyl-lysine","0.2689608884007566","0.84427054731832318",1,"n6-acetyllysine",NA,NA,NA,NA
+"50","Yeoman","GC-MS","n-acetyl-serine","0.2483660130718954","0.72088235294117642",1,"n-acetylserine",NA,NA,NA,NA

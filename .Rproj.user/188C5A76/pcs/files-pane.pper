@@ -1,0 +1,9 @@
+{
+    "path" : "~/CVL_Fluid_Metabolomics_Analysis/Metabolome_Study_Summaries",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}
